@@ -13,14 +13,37 @@ def my_pow(value, exponent, modulo):
         buffer = buffer * value % modulo
     return chr(buffer)
 
+def is_prime(value):
+    for i in range(2, int(value**(1/2))+1):
+        if value % i == 0:
+            return False
+    return True
 
 def gen_keys():
-    e = 23
-    p = 11
-    q = 13
+    import random
+    
+    p = 4
+    while(is_prime(p) is False):
+        p = random.randint(10,50)
+    print("p", p)
+        
+    q = 4
+    while(is_prime(q) is False or q == p):
+        q = random.randint(10, 50)
+    print("q", q)
+
     N = p * q
-    public_rsa = (e, N)
+    print("N", N)
+    
+    
     phi_N = (p-1)*(q-1)
+    
+    e = N
+    while(eeA(phi_N, e)[0] != 1):
+        e = random.randint(2, N)
+        
+    print("e", e)
+    public_rsa = (e, N)
     a, d, k = eeA(e, phi_N)
     private_rsa = (d, N)
     return public_rsa, private_rsa
@@ -34,7 +57,7 @@ def eeA(a, b):
     x = y1 - (b//a) * x1
     y = x1
      
-    return (0,x,y)
+    return (t,x,y)
 
 if __name__ == "__main__" :
     public_rsa, private_rsa = gen_keys()
